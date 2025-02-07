@@ -1,0 +1,14 @@
+# Blender 3.3.1 MTL File: 'Main.blend'
+# www.blender.org
+
+newmtl TT_checker_512x512_UV_GRID.001
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Textures/BaseColor.png
+map_Ns Textures/Roughness.png
+map_refl Textures/Metallic.png
+map_Ke Textures/Emissive.png
+map_Bump -bm 1.000000 Textures/Normal.png
