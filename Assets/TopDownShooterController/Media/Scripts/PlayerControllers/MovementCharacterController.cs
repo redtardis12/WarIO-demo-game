@@ -44,32 +44,19 @@ namespace TopDownShooter
         [Tooltip("Force for the dash, a greater value more distance for the dash.")]
         public float DashForce = 5f;
 
-        [Header("JetPack")] [Tooltip("Player have jetpack?")]
-        public bool Jetpack = true;
-
-        [Tooltip("The fuel maxima capacity for the jetpack.")]
-        public float JetPackMaxFuelCapacity = 90;
-
-        [Tooltip("The current fuel for the jetpack, if 0 the jet pack off.")]
-        public float JetPackFuel;
-
-        [Tooltip("The force for the jetpack, this impulse the player up.")]
-        public float JetPackForce;
-
-        [Tooltip("Jet pack consume this quantity by second active.")]
-        public float FuelConsumeSpeed;
-
-        [Header("SlowFall")] [Tooltip("This allow the player a slow fall, you can use an item like a parachute.")]
-        public bool HaveSlowFall;
-
-        [Tooltip("Speed vertical for the slow fall.")] [Range(0, 5)]
-        public float SlowFallSpeed = 1.5f;
-
-        [Tooltip("Slow fall forward speed.")] [Range(0, 1)]
-        public float SlowFallForwardSpeed = 0.1f;
-
         [Tooltip("This is the drag force for the character, a standard value are (8, 0, 8). ")]
         public Vector3 DragForce;
+
+        [Header("Enemy Detection Settings")]
+        
+        [Tooltip("This is the layer for the enemies.")]
+        public LayerMask enemyLayer;
+        
+        [Tooltip("This is the radius to detect enemies.")]
+        public float detectionRadius = 10f;
+        
+        [Tooltip("This is the speed at which the player rotates towards the closest enemy.")]
+        public float rotationSpeed = 5f;
 
         [Tooltip("This is the animator for you character.")]
         public Animator PlayerAnimator;
@@ -79,8 +66,6 @@ namespace TopDownShooter
 
         public GameObject JumpEffect;
         public GameObject DashEffect;
-        public GameObject JetPackObject;
-        public GameObject SlowFallObject;
 
         public PlayerController PlayerController;
 
@@ -90,9 +75,7 @@ namespace TopDownShooter
         public float Horizontal2;
         public float Vertical2;
 
-        public float detectionRadius = 10f; // Radius to detect enemies
-        public LayerMask enemyLayer; // Physics layer for enemies
-        public float rotationSpeed = 5f; // Speed at which the player rotates towards the closest enemy
+        
 
         private Collider[] hitColliders; // Reusable array for Physics.OverlapSphereNonAlloc
         private const int maxColliders = 10; // Maximum number of colliders to detect
@@ -104,8 +87,6 @@ namespace TopDownShooter
 
         private bool _jump;
         private bool _dash;
-        private bool _flyJetPack;
-        private bool _slowFall;
         private bool _shooting;
 
         //get direction for the camera
@@ -154,8 +135,6 @@ namespace TopDownShooter
             //other buttons skills
             _jump = PlayerController.GetJumpValue();
             _dash = PlayerController.GetDashValue();
-            _flyJetPack = PlayerController.GetJetPackValue();
-            _slowFall = PlayerController.GetSlowFallValue();
 
             //this invert controls 
             if (_invertedControl)
@@ -181,22 +160,6 @@ namespace TopDownShooter
                 if (_dash)
                 {
                     Dash();
-                }
-
-                //jetPack
-                if (_flyJetPack)
-                {
-                    FlyByJetPack();
-                }
-
-                //this activate or deactivate jetPack Object and effect.
-                JetPackObject.SetActive(Jetpack && _flyJetPack && JetPackFuel > 0);
-
-                //slowFall
-                if (HaveSlowFall && _slowFall)
-                {
-                    _activeFall = !_activeFall;
-                    SlowFallObject.SetActive(_activeFall);
                 }
                 
             }
@@ -226,18 +189,6 @@ namespace TopDownShooter
 
         private void FixedUpdate()
         {
-            if (_activeFall)
-            {
-                if (!_controller.isGrounded && !PlayerController.SwimmingController.Swimming)
-                {
-                    SlowFall();
-                }
-                else
-                {
-                    SlowFallObject.SetActive(false);
-                    _activeFall = false;
-                }
-            }
             //get the input direction for the camera position.
             _forward = _cameraTransform.TransformDirection(Vector3.forward);
             _forward.y = 0f;
@@ -274,9 +225,10 @@ namespace TopDownShooter
             //set the forward direction if have some weapons loaded
             if (PlayerController.ShooterController.CurrentWeaponClass != Weapon.WeaponType.Hands)
             {
-                if (PlayerController.UseMouseToRotate && PlayerController.MovCharController.TensionFoRightStickLowerThan(0.1f))
+                if (PlayerController.MovCharController.TensionFoRightStickLowerThan(0.1f))
                 {
                 Transform closestEnemy = FindClosestEnemy();
+                _shooting = true;
 
                 // Rotate towards the closest enemy
                     if (closestEnemy != null)
@@ -369,9 +321,7 @@ namespace TopDownShooter
                 return;
             }
 
-            //removing parachute if active;
             _activeFall = false;
-            SlowFallObject.SetActive(_activeFall);
 
             //
             if (_controller.isGrounded)
@@ -409,7 +359,7 @@ namespace TopDownShooter
 
         public void Dash()
         {
-            if (!CanDash || DashColdown > 0 || _flyJetPack)
+            if (!CanDash || DashColdown > 0)
             {
                 return;
             }
@@ -438,45 +388,7 @@ namespace TopDownShooter
             }
         }
 
-        public void FlyByJetPack()
-        {
-            if (!Jetpack || JetPackFuel <= 0)
-            {
-                return;
-            }
-
-            //if slowFall is active deactivate.
-            if (_activeFall)
-            {
-                _activeFall = false;
-                SlowFallObject.SetActive(false);
-            }
-
-            JetPackFuel -= Time.deltaTime * FuelConsumeSpeed;
-            _velocity.y = 0;
-            _velocity.y += Mathf.Sqrt(JetPackForce * -2f * Gravity);
-        }
-
-        //this is for a slow fall like a parachute.
-        private void SlowFall()
-        {
-            _controller.Move(transform.forward * SlowFallForwardSpeed);
-            _velocity.y = 0;
-            _velocity.y += -SlowFallSpeed;
-        }
-
-        //add fuel to the jetPack
-        public void AddFuel(float fuel)
-        {
-            JetPackFuel += fuel;
-            if (JetPackFuel > JetPackMaxFuelCapacity)
-            {
-                JetPackFuel = JetPackMaxFuelCapacity;
-            }
-
-            Debug.Log("Fuel +" + fuel);
-        }
-
+ 
         public void ResetOriginalSpeed()
         {
             RunningSpeed = _originalRunningSpeed;
@@ -523,16 +435,6 @@ namespace TopDownShooter
         public void ActivateDeactivateDash(bool canDash)
         {
             CanDash = canDash;
-        }
-
-        public void ActivateDeactivateSlowFall(bool canSlowFall)
-        {
-            HaveSlowFall = canSlowFall;
-        }
-
-        public void ActivateDeactivateJetPack(bool haveJetPack)
-        {
-            Jetpack = haveJetPack;
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)

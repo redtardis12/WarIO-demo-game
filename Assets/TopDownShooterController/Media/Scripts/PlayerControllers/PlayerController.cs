@@ -63,7 +63,7 @@ namespace TopDownShooter
 
         public bool GetDashValue()
         {
-            return Input.GetKeyDown(KeyCode.F);
+            return Input.GetKeyDown(KeyCode.LeftShift);
         }
 
         public bool GetJetPackValue()
@@ -84,20 +84,6 @@ namespace TopDownShooter
         public bool GetReloadWeaponValue()
         {
             return Input.GetKeyDown(KeyCode.R);
-        }
-
-        public void ActivateJetPack(bool active)
-        {
-            _activeJetPack = active;
-        }
-
-        public void ActivateSlowFall()
-        {
-            _activeSlowFall = true;
-        }
-        public void DeActivateSlowFall()
-        {
-            _activeSlowFall = false;
         }
 
         public Vector3 GetMouseDirection()

@@ -14,7 +14,7 @@ namespace TopDownShooter
         public float Smoothing = 5f;
 
         // The initial offset from the target.
-        private Vector3 _offset;
+        public Vector3 _offset;
 
         private bool _rotateToLeft;
         private bool _rotateToRight;
@@ -55,14 +55,26 @@ namespace TopDownShooter
             if (_rotateToRight) RotateToRight();
         }
 
+        private void CenterCameraOnTarget()
+        {
+
+            transform.position = Target.position + _offset;
+        }
+
         private void RotateToLeft()
         {
-            transform.Rotate(Vector3.up * RotationSpeed, Space.World);
+            CenterCameraOnTarget();
+            transform.RotateAround(Target.position, Vector3.up, RotationSpeed * Time.deltaTime);
+
+            _offset = transform.position - Target.position;
         }
 
         private void RotateToRight()
         {
-            transform.Rotate(Vector3.up * -RotationSpeed, Space.World);
+            CenterCameraOnTarget();
+            transform.RotateAround(Target.position, Vector3.up, -RotationSpeed * Time.deltaTime);
+
+            _offset = transform.position - Target.position;
         }
     }
 }

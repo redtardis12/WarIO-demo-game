@@ -1,8 +1,16 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class EnemyWaveController : MonoBehaviour
 {
-    public GameObject enemyPrefab; // Prefab of the enemy to spawn
+    [System.Serializable]
+    public class EnemySpawnData
+    {
+        public GameObject enemyPrefab; // Enemy prefab to spawn
+        public float spawnWeight = 1f; // Weight for random selection (higher weight = higher chance)
+    }
+
+    public List<EnemySpawnData> enemiesToSpawn; // List of enemies with their spawn weights
     public GameObject player; // Reference to the player's transform
     public Camera mainCamera; // Reference to the main camera
 
@@ -18,14 +26,18 @@ public class EnemyWaveController : MonoBehaviour
     private float timer; // Timer to track wave progression
     private float nextSpawnTime; // Time for the next spawn attempt
     private int currentEnemiesPerWave; // Current number of enemies to spawn per wave
+    private float totalSpawnWeight; // Total weight for random selection
 
     void Start()
     {
-        if (enemyPrefab == null || player == null || mainCamera == null)
+        if (enemiesToSpawn.Count == 0 || player == null || mainCamera == null)
         {
             Debug.LogError("Please assign all required fields in the EnemyWaveController script.");
             return;
         }
+
+        // Calculate the total spawn weight
+        CalculateTotalSpawnWeight();
 
         timer = 0f;
         nextSpawnTime = 0f;
@@ -55,6 +67,15 @@ public class EnemyWaveController : MonoBehaviour
         }
     }
 
+    void CalculateTotalSpawnWeight()
+    {
+        totalSpawnWeight = 0f;
+        foreach (var enemyData in enemiesToSpawn)
+        {
+            totalSpawnWeight += enemyData.spawnWeight;
+        }
+    }
+
     void SpawnWave(int enemyCount)
     {
         for (int i = 0; i < enemyCount; i++)
@@ -68,19 +89,44 @@ public class EnemyWaveController : MonoBehaviour
         // Calculate a random position outside the camera view but within the spawn radius
         Vector3 spawnPosition = GetRandomSpawnPosition();
 
-        // Spawn the enemy
-        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        // Choose a random enemy prefab based on spawn weights
+        GameObject enemyPrefab = ChooseRandomEnemyPrefab();
 
-        EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
-        enemyAI.enabled = true;
-        if (enemyAI != null)
+        // Spawn the enemy
+        if (enemyPrefab != null)
         {
-            enemyAI.player = player;
+            GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+
+            // Assign the player reference to the enemy's AI script
+            BaseEnemyAI enemyAI = enemy.GetComponent<BaseEnemyAI>();
+            if (enemyAI != null)
+            {
+                enemyAI.SetPlayer(player);
+            }
+            else
+            {
+                Debug.LogWarning("Enemy prefab does not have an EnemyAI component.");
+            }
         }
-        else
+    }
+
+    GameObject ChooseRandomEnemyPrefab()
+    {
+        // Generate a random value within the total spawn weight
+        float randomValue = Random.Range(0f, totalSpawnWeight);
+
+        // Iterate through the enemies and select one based on the random value
+        foreach (var enemyData in enemiesToSpawn)
         {
-            Debug.LogWarning("Enemy prefab does not have an EnemyAI component.");
+            if (randomValue < enemyData.spawnWeight)
+            {
+                return enemyData.enemyPrefab;
+            }
+            randomValue -= enemyData.spawnWeight;
         }
+
+        // Fallback to the first enemy prefab if something goes wrong
+        return enemiesToSpawn[0].enemyPrefab;
     }
 
     Vector3 GetRandomSpawnPosition()

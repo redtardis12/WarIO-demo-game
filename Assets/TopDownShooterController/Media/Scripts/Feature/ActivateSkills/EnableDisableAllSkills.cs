@@ -21,8 +21,6 @@ namespace TopDownShooter
             player.ActivateDeactivateJump(EnableAllSkills);
             player.ActivateDeactivateDoubleJump(EnableAllSkills);
             player.ActivateDeactivateDash(EnableAllSkills);
-            player.ActivateDeactivateSlowFall(EnableAllSkills);
-            player.ActivateDeactivateJetPack(EnableAllSkills);
 
             if (Effect)
             {

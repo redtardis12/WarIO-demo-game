@@ -1,7 +1,7 @@
 using TopDownShooter;
 using UnityEngine;
 
-public class ShooterAI : MonoBehaviour
+public class ShooterAI : BaseEnemyAI
 {
     public GameObject player; // Reference to the player's transform
     public float moveSpeed = 3f; // Speed at which the enemy moves
@@ -22,11 +22,6 @@ public class ShooterAI : MonoBehaviour
 
     void Update()
     {
-        if (player == null)
-        {
-            Debug.LogWarning("Player reference not set in EnemyAI script.");
-            return;
-        }
 
         // Calculate the distance to the player
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
@@ -72,5 +67,9 @@ public class ShooterAI : MonoBehaviour
             //add speed and direction to the bullet
             bullet.SetupBullet(BulletPoint.forward * WeaponData.Weapons[1].BulletSpeed,
                 damage);
+    }
+
+    public override void SetPlayer(GameObject player){
+        this.player = player;
     }
 }
