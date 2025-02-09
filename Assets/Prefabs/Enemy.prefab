@@ -156,8 +156,7 @@ MonoBehaviour:
   DamageColor: {r: 1, g: 0, b: 0, a: 1}
   DamageBorderPulseAmount: 4
   DamageFadeDuration: 0.15
-  BorderRenderers:
-  - {fileID: 0}
+  BorderRenderers: []
 --- !u!54 &1198215228274328451
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -222,8 +221,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.75708675, z: 1}
-  m_Center: {x: 0, y: -0.12145662, z: 0}
+  m_Size: {x: 1, y: 2.017912, z: 1}
+  m_Center: {x: 0, y: 0.50895596, z: 0}
 --- !u!1 &612321367340013016
 GameObject:
   m_ObjectHideFlags: 0

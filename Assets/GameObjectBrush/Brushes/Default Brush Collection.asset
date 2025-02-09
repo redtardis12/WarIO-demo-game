@@ -37,7 +37,7 @@ MonoBehaviour:
   primarySelectedBrush:
     brushObject: {fileID: 2850601745711547609, guid: 10f020e2d02ba894c91ebde8cf3ebbb6, type: 3}
     usePrefabs: 1
-    allowIntercollision: 0
+    allowIntercollision: 1
     alignToSurface: 0
     randomizeXRotation: 0
     randomizeYRotation: 1

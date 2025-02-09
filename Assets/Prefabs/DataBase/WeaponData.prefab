@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1360822401604504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4715392832392498}
+  - component: {fileID: 114323996127282120}
+  m_Layer: 0
+  m_Name: WeaponData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4715392832392498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360822401604504}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.05, y: 0.05, z: -0.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114323996127282120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360822401604504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a45390ffe91534a9b6bf78f802ba76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Weapons:
+  - WeaponName: Rifle
+    WeaponClass: 1
+    WeaponPrefab: {fileID: 1093050535257716, guid: 3ff58751fe0a7c14e826d1e4ed9cc348, type: 3}
+    WeaponImage: {fileID: 21300000, guid: 78454e9a19ee52d43a0d5737396e0b7f, type: 3}
+    MuzzleEffect: {fileID: 1890411601549848, guid: 373f2f7ba06ba754883ae91a8b653e4c, type: 3}
+    WeaponMagazine: 25
+    ReloadTime: 0
+    FireRate: 0.2
+    BulletId: 0
+    Bullet: {fileID: 1770173410670346, guid: 5d3a6f61a3e25654c88a36852ccd3afd, type: 3}
+    Damage: 10
+    BulletSpeed: 200
+    DelayToLaunch: 0
+    DelayToTurn: 0
+    detectionRadius: 40
+    WeaponDrop: {fileID: 1398164859803464, guid: 9d22aadb7eaae3041a6497b0f246afe5, type: 3}
+  - WeaponName: S.Rifle
+    WeaponClass: 1
+    WeaponPrefab: {fileID: 1097170376144410, guid: dd39d4c1447a83e42bac39fe87cb0f80, type: 3}
+    WeaponImage: {fileID: 21300000, guid: 02f6fc97fff373649b4cd7c933ebbc90, type: 3}
+    MuzzleEffect: {fileID: 1890411601549848, guid: 373f2f7ba06ba754883ae91a8b653e4c, type: 3}
+    WeaponMagazine: 10
+    ReloadTime: 0
+    FireRate: 0.5
+    BulletId: 1
+    Bullet: {fileID: 1918596692443766, guid: 4b5ca146c4348dc47a95937472314e57, type: 3}
+    Damage: 20
+    BulletSpeed: 100
+    DelayToLaunch: 0
+    DelayToTurn: 0
+    detectionRadius: 20
+    WeaponDrop: {fileID: 1154566298408816, guid: 005e5911966ee924d8b4c52b9959e7e0, type: 3}
+  - WeaponName: Pistol
+    WeaponClass: 2
+    WeaponPrefab: {fileID: 1564352147081996, guid: ae3ab98661bfb174781f2cc395a19fc8, type: 3}
+    WeaponImage: {fileID: 21300000, guid: 2eae758b6c8d91a419748e35d0c1424c, type: 3}
+    MuzzleEffect: {fileID: 1890411601549848, guid: 373f2f7ba06ba754883ae91a8b653e4c, type: 3}
+    WeaponMagazine: 60
+    ReloadTime: 1
+    FireRate: 0.8
+    BulletId: 0
+    Bullet: {fileID: 1770173410670346, guid: 5d3a6f61a3e25654c88a36852ccd3afd, type: 3}
+    Damage: 35
+    BulletSpeed: 200
+    DelayToLaunch: 0
+    DelayToTurn: 0
+    detectionRadius: 10
+    WeaponDrop: {fileID: 1462660782747318, guid: 2789b290fd0cb9f40b7d812ec0770a39, type: 3}

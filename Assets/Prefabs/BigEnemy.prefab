@@ -1312,8 +1312,7 @@ MonoBehaviour:
   DamageColor: {r: 1, g: 0, b: 0, a: 1}
   DamageBorderPulseAmount: 4
   DamageFadeDuration: 0.15
-  BorderRenderers:
-  - {fileID: 0}
+  BorderRenderers: []
 --- !u!54 &839223296677038965
 Rigidbody:
   m_ObjectHideFlags: 0
